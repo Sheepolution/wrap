@@ -46,6 +46,20 @@ Which is equal to this:
 f = function () self.bar = 10 end
 ```
 
+#### NIL
+
+You can use `wrap.NIL` to set properties to `nil`.
+
+```lua
+f = self.wrap({bar = wrap.NIL})
+```
+
+Is equal to this:
+
+```lua
+f = function () self.bar = nil end
+```
+
 ### Chaining
 
 By using `wrap:chain()` you can chain multiple methods. Finish the chain with `:done()`.
