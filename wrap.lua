@@ -1,5 +1,7 @@
 local wrap = {}
 
+wrap.NIL = "___NIL___"
+
 function wrap.new(obj)
 	return setmetatable({obj = obj, chain = wrap.chain}, wrap)
 end
@@ -14,9 +16,15 @@ function wrap:__index(f)
 end
 
 function wrap:__call(s, t)
-	if not t then t = s s = self.obj end
-	return function ()
-		for k,v in pairs(t) do
+	if not t then
+		t = s
+		s = self.obj
+	end
+	return function()
+		for k, v in pairs(t) do
+			if v == wrap.NIL then
+				v = nil
+			end
 			s[k] = v
 		end
 	end
@@ -34,10 +42,16 @@ function chain_mt:__index(f)
 	end
 end
 
-function chain_mt:__call(s,t)
-	if not t then t = s s = self.obj end
-	self[#self + 1] = function ()
-		for k,v in pairs(t) do
+function chain_mt:__call(s, t)
+	if not t then
+		t = s
+		s = self.obj
+	end
+	self[#self + 1] = function()
+		for k, v in pairs(t) do
+			if v == wrap.NIL then
+				v = nil
+			end
 			s[k] = v
 		end
 	end
